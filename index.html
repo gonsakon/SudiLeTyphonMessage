@@ -11,18 +11,21 @@
 <!-- og:images 來源於中央氣象局 -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-  <script src="javascripts/all.js"></script>
-  <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ 
+<style>
+  #tab a{
+    font-size: 24px;
+  }
+  #mapCanvas{
+    width: 100%;
+    height: 600px;
+  }
+  .stations, .stations svg { position: absolute; }
+.stations text{font-size: 16px;}
+  .stations svg { width: 120px; height: 30px; padding-right: 100px; font: 12px sans-serif; }
 
-  ga('create', 'UA-17485038-7', 'auto');
-  ga('send', 'pageview');
-
-</script>
+  .stations circle { fill: #FBD10A; stroke: black; stroke-width: 1px; }
+</style>
 </head>
 <body ng-app="app">
   <div class="wrap" ng-controller="PeopleCtrl">
@@ -47,33 +50,66 @@
            
           </ul>
       </div>
+      <div class="btn-group btn-group-justified" role="group" id="tab">
+            <div class="btn-group" role="group">
+              <a class="btn btn-default"  ng-class="{'btn-primary': type=='area'}" href="#area" ng-click="type='area'"><i class="icon-find"></i>列表查詢</a>
+            </div>
+            <div class="btn-group" role="group">
+              <a class="btn btn-default" ng-class="{'btn-primary': type=='map'}" href="#map" ng-click="mapchange()"><i class="icon-hotel"></i>災害示警地圖</a>
+            </div>
+            
+          </div>
     </nav>
-    <div class="container">
-      <div class="alert alert-info" role="alert">
-      防災災情及相關諮詢電話：87863119分機8900~8907 <br / >
+    <div class="area" ng-show="type=='area'">
+      <div class="container">
+        <div class="alert alert-info" role="alert">
+        防災災情及相關諮詢電話：87863119分機8900~8907 <br / >
+        </div>
+        <div class="form-group">
+          <select class="form-control" ng-model="area" ng-options="o for o in taipeiArea">
+          <option value="">-- 依區域搜尋 --</option>
+          </select>
+        </div>
+        <div class="row">
+          <table class="table table-striped">
+           <tr>
+              <th width="15%">發生時間</th>
+             <th width="5%">區域</th>
+             <th width="15%">詳細位置</th>
+             <th width="65%">描述</th>
+           </tr>
+           <tr ng-repeat="people in streetData | filter:area">
+           <td>{{people.CaseTime[0]}}</td>
+            <td><span class="label label-primary">{{people.CaseLocationDistrict[0]}}</span><br></td>
+            <td>{{people.CaseLocationDescription[0]}}</td>
+            <td>{{people.CaseDescription[0]}}</td>
+           </tr>
+          </table>
+        </div>
       </div>
-      <div class="form-group">
-        <select class="form-control" ng-model="area" ng-options="o for o in taipeiArea">
-        <option value="">-- 依區域搜尋 --</option>
-        </select>
-      </div>
-      <div class="row">
-        <table class="table table-striped">
-         <tr>
-            <th width="15%">發生時間</th>
-           <th width="5%">區域</th>
-           <th width="15%">詳細位置</th>
-           <th width="65%">描述</th>
-         </tr>
-         <tr ng-repeat="people in streetData | filter:area">
-         <td>{{people.CaseTime[0]}}</td>
-          <td><span class="label label-primary">{{people.CaseLocationDistrict[0]}}</span><br></td>
-          <td>{{people.CaseLocationDescription[0]}}</td>
-          <td>{{people.CaseDescription[0]}}</td>
-         </tr>
-        </table>
+    </div>
+    <div class="map" ng-show="type=='map'">
+      <div class="container">
+       <div id="mapCanvas"></div>
       </div>
     </div>
   </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    
+   
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
+  <script src="javascripts/all.js"></script>
+   <script>
+
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-17485038-7', 'auto');
+    ga('send', 'pageview');
+
+  </script>
 </body>
 </html>
