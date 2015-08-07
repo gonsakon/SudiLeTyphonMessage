@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>蘇迪勒颱風 - 台北市災害動態資訊</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+  <script src="javascripts/all.js"></script>
+</head>
+<body ng-app="app">
+  <div class="wrap" ng-controller="PeopleCtrl">
+    <nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">蘇迪勒颱風 - 台北市災害動態資訊</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="alert alert-info" role="alert">
+      防災災情及相關諮詢電話：87863119分機8900~8907 <br / >
+      </div>
+      <div class="row">
+        <table class="table table-striped">
+         <tr>
+            <th width="15%">發生時間</th>
+           <th width="5%">區域</th>
+           <th width="15%">詳細位置</th>
+           <th width="65%">描述</th>
+         </tr>
+         <tr ng-repeat="people in streetData">
+         <td>{{people.CaseTime[0]}}</td>
+          <td><span class="label label-primary">{{people.CaseLocationDistrict[0]}}</span><br></td>
+          <td>{{people.CaseLocationDescription[0]}}</td>
+          <td>{{people.CaseDescription[0]}}</td>
+         </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
