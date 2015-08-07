@@ -42,6 +42,12 @@
       <div class="alert alert-info" role="alert">
       防災災情及相關諮詢電話：87863119分機8900~8907 <br / >
       </div>
+      <div class="alert">
+        依區域搜尋：
+        <select ng-model="area" ng-options="o for o in taipeiArea">
+        <option value="">-- 請選擇區域 --</option>
+        </select>
+      </div>
       <div class="row">
         <table class="table table-striped">
          <tr>
@@ -50,7 +56,7 @@
            <th width="15%">詳細位置</th>
            <th width="65%">描述</th>
          </tr>
-         <tr ng-repeat="people in streetData">
+         <tr ng-repeat="people in streetData | filter:area">
          <td>{{people.CaseTime[0]}}</td>
           <td><span class="label label-primary">{{people.CaseLocationDistrict[0]}}</span><br></td>
           <td>{{people.CaseLocationDescription[0]}}</td>
