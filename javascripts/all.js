@@ -21,10 +21,11 @@ d3.json("http://tonyq.org/kptaipei/GetDisasterSummary-20150808.php", function(da
 var mapdata = data.DataSet["diffgr:diffgram"][0].NewDataSet[0].CASE_SUMMARY;
 var power =[];
 mapdata.forEach(function(d){
-  if(d.Name[0] == '電力停電'){
+  if(d.Name[0] == '電力停電' && d.CaseComplete[0]=='false'){
     power.push(d);
   }
 });
+console.log(power.length);
   var overlay = new google.maps.OverlayView();
 
   overlay.onAdd = function() {
