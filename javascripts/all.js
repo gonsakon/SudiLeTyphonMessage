@@ -1,7 +1,7 @@
 var app = angular.module('app', ['ngSanitize']);
 
 app.controller('PeopleCtrl', function($scope,$http,$sce) {
-  $scope.type='news';
+  $scope.type='area';
   $scope.newsData = {};
   $scope.keyword = '';
   $scope.streetData = {};
@@ -21,7 +21,6 @@ app.controller('PeopleCtrl', function($scope,$http,$sce) {
     var thisdata= data.DataSet["diffgr:diffgram"][0].NewDataSet[0].DCSDisasterDecision;
     for(var i=0;thisdata.length>i;i++){
       thisdata[i].Decision[0] = thisdata[i].Decision[0].replace(new RegExp('\r?\n','g'), '<br />');
-      // thisdata[i].Decision[0].replace(/\r\n/g,"<br />");
     }
     $scope.newsData = thisdata;
     });
