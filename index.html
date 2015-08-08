@@ -14,7 +14,7 @@
  
 <style>
   #tab a{
-    font-size: 24px;
+    font-size: 18px;
   }
   #mapCanvas{
     width: 100%;
@@ -25,6 +25,15 @@
   .stations svg { width: 120px; height: 30px; padding-right: 100px; font: 12px sans-serif; }
 
   .stations circle { fill: #FBD10A; stroke: black; stroke-width: 1px; }
+  .news p{
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 24px;
+  }
+  .newpage{
+    border-bottom: 1px dashed gray;
+    margin-bottom: 24px;
+  }
 </style>
 </head>
 <body ng-app="app">
@@ -57,7 +66,9 @@
             <div class="btn-group" role="group">
               <a class="btn btn-default" ng-class="{'btn-primary': type=='map'}" href="#map" ng-click="mapchange()"><i class="icon-hotel"></i>停電區域</a>
             </div>
-            
+            <div class="btn-group" role="group">
+              <a class="btn btn-default" ng-class="{'btn-primary': type=='news'}" href="#news" ng-click="type='news'"><i class="icon-hotel"></i>消防局公告</a>
+            </div>
           </div>
     </nav>
     <div class="area" ng-show="type=='area'">
@@ -88,15 +99,32 @@
         </div>
       </div>
     </div>
+    
     <div class="map" ng-show="type=='map'">
       <div class="container">
+        <div class="alert alert-info" role="alert">
+          目前尚有{{power}}處停電。 <br>
+          如有供電問題，請撥打台電客服1911。1040808
+      </div>
        <div id="mapCanvas"></div>
       </div>
     </div>
+    <div class="news"  ng-show="type=='news'">
+      <div class="container">
+        <p ng-bind-html="qq"></p>
+        <div class="newpage" ng-repeat="news in newsData">
+          <h2>{{news.DecisionName[0]}}</h2>
+          <p >
+            <span class="label label-primary">發布人：{{news.DecisionMan[0]}}</span> <span class="label label-info">發布時間：{{news.DecisionTime[0]}}</span>
+          </p>
+          <p ng-bind-html="news.Decision[0]"> </p> 
+        </div>
+      </div>
+    </div>
   </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
     
-   
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+   <script src="javascripts/angular-sanitize.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
   <script src="javascripts/all.js"></script>
