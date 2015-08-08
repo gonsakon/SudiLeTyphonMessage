@@ -13,27 +13,31 @@ app.controller('PeopleCtrl', function($scope,$http) {
   $http.get('http://tonyq.org/kptaipei/GetDisasterSummary-20150808.php').
   success(function(data, status, headers, config) {
     $scope.streetData = data.DataSet["diffgr:diffgram"][0].NewDataSet[0].CASE_SUMMARY;
-    
     });
- 
-
   });
 var mapOptions = { zoom: 15, center: new google.maps.LatLng(25.042355, 121.532904) };
 var map = new google.maps.Map( document.getElementById('mapCanvas') , mapOptions);
 d3.json("http://tonyq.org/kptaipei/GetDisasterSummary-20150808.php", function(data){
 var mapdata = data.DataSet["diffgr:diffgram"][0].NewDataSet[0].CASE_SUMMARY;
+var power =[];
+mapdata.forEach(function(d){
+  if(d.Name[0] == '電力停電'){
+    power.push(d);
+  }
+});
   var overlay = new google.maps.OverlayView();
 
   overlay.onAdd = function() {
-    var layer = d3.select(this.getPanes().overlayLayer).append("div")
+    var layer = d3.select(this.getPanes().overlayMouseTarget).append("div")
         .attr("class", "stations");
-
+// overlayMouseTarget
+// overlayLayer
     overlay.draw = function() {
       var projection = this.getProjection(),
           padding = 16;
 
       var marker = layer.selectAll("svg")
-          .data(d3.entries(mapdata))
+          .data(d3.entries(power))
           .each(transform) // update existing markers
           .enter().append("svg:svg")
             .each(transform)
@@ -44,13 +48,19 @@ var mapdata = data.DataSet["diffgr:diffgram"][0].NewDataSet[0].CASE_SUMMARY;
           .attr("cx", padding)
           .attr("cy", padding);
 
+          // .append("svg:title").text(function(d){
+          //   console.log(d.value.CaseDescription[0]);
+          //   return d.value.CaseDescription[0];
+
+          // });
+
       marker.append("svg:text")
           .attr("x", padding + 7)
           .attr("y", padding)
           .attr("dy", ".31em")
           .text(function(d) {
    
-        return d.value.Name[0]; });
+        return d.value.CaseDescription[0]; });
 
       function transform(d) {
  
